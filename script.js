@@ -42,18 +42,17 @@ fetch(TAG_SOURCE)
           label.textContent = tag;
 
           if (desc) {
-          label.title = desc; // Desktop tooltip
+          label.title = desc; // tooltip desktop
           label.addEventListener('click', e => {
-          if (window.innerWidth <= 768) {
-          e.preventDefault();
-          alert(`${tag}: ${desc}`); // Mobile fallback
+            if (window.innerWidth <= 768) {
+              e.preventDefault();
+              alert(`${tag}: ${desc}`); // Mobile fallback
               }
             });
           }
   
           tagsContainer.appendChild(input);
           tagsContainer.appendChild(label);
-
           allTags.push({ tag, id, groupName, subgroupName });
         });
 
