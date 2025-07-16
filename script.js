@@ -24,7 +24,10 @@ fetch(TAG_SOURCE)
 
         const tagsContainer = document.createElement('div');
 
-        tags.forEach(tag => {
+        tags.forEach(tagObj => {
+          const tag = typeof tagObj === 'string' ? tagObj : tagObj.name;
+          const desc = typeof tagObj === 'object' && tagObj.desc ? tagObj.desc : '';
+          
           const id = `tag-${groupName}-${subgroupName}-${tag}`;
           const input = document.createElement('input');
           input.type = 'checkbox';
@@ -38,6 +41,16 @@ fetch(TAG_SOURCE)
           label.setAttribute('for', id);
           label.textContent = tag;
 
+          if (desc) {
+          label.title = desc; // Desktop tooltip
+          label.addEventListener('click', e => {
+          if (window.innerWidth <= 768) {
+          e.preventDefault();
+          alert(`${tag}: ${desc}`); // Mobile fallback
+              }
+            });
+          }
+  
           tagsContainer.appendChild(input);
           tagsContainer.appendChild(label);
 
