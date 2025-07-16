@@ -17,14 +17,14 @@ Interaktywny system tagów do wyszukiwania, filtrowania i katalogowania postów 
 
 ## 📁 Struktura repozytorium
 
-index.html - Wybór tagów (wyszukiwarka)
-wyniki.html - Wyświetlanie wyników z eksportem
-style.css - Style wizualne
-script.js - Logika działania wyszukiwarki
-tagi.json - Główna baza tagów
-edytor.html - Edytor tagów JSON
-edytor.js - Skrypt dla edytora
-README.md - Ten plik
+- index.html - Wybór tagów (wyszukiwarka)
+- wyniki.html - Wyświetlanie wyników z eksportem
+- style.css - Style wizualne
+- script.js - Logika działania wyszukiwarki i localStorage
+- tagi.json - Główna baza tagów
+- edytor.html - Edytor tagów JSON. Edytor tagów online (dodawanie/usuwanie)
+- edytor.js - Skrypt dla edytora. Logika edytora tagów
+- README.md - Ten plik
 
 
 ## ✏️ Przyszłe plany
