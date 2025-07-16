@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wyniki</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Wyniki wyszukiwania</h1>
+  <div id="selected-tags"></div>
+  <div id="results">Ładowanie...</div>
+  <button onclick="exportToFile()">Eksportuj jako CSV</button>
+  <button onclick="exportToJSON()">Eksportuj jako JSON</button>
+  <script>
+    const STORAGE_KEY = 'last-selected-tags';
+    const selectedTags = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+    const tagsByGroup = {};
+    selectedTags.forEach(t => {
+      const { tag, groupName } = t;
+      if (!tagsByGroup[groupName]) tagsByGroup[groupName] = [];
+      tagsByGroup[groupName].push(tag);
+    });
+
+    const selectedDiv = document.getElementById('selected-tags');
+    selectedDiv.innerHTML = '<h3>Wybrane tagi:</h3>' + Object.entries(tagsByGroup).map(([group, tags]) => `
+      <div><strong>${group}:</strong> ${tags.join(', ')}</div>`).join('');
+
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '<h3>Wyniki:</h3>' + Object.entries(tagsByGroup).map(([group, tags]) => `
+      <h4>${group}</h4><ul>${tags.map(t => `<li>Post z tagiem: ${t}</li>`).join('')}</ul>`).join('');
+
+    function exportToFile() {
+      const flat = selectedTags.map(t => `${t.groupName},${t.subgroupName},${t.tag}`).join('\n');
+      const blob = new Blob([flat], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'tagi-wyniki.csv';
+      link.click();
+    }
+
+    function exportToJSON() {
+      const blob = new Blob([JSON.stringify(selectedTags, null, 2)], {
+        type: 'application/json;charset=utf-8'
+      });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'tagi-wyniki.json';
+      link.click();
+    }
+  </script>
+</body>
+</html>
