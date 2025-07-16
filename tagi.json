@@ -1,9 +1,22 @@
-[
-  "shounen",
-  "romance",
-  "isekai",
-  "fantasy",
-  "dark",
-  "comedy",
-  "sci-fi"
-]
+{
+  "Czas i Miejsce": {
+    "Europa": [
+      { "name": "Starożytność", "desc": "Epoka antyczna, przed średniowieczem." },
+      { "name": "Średniowiecze", "desc": "Od V do XV wieku w Europie." }
+    ],
+    "Japonia": [
+      { "name": "Feudalna Japonia", "desc": "Okres samurajów i szogunów." },
+      "Nowoczesna Japonia"
+    ]
+  },
+  "Gatunki": {
+    "Akcja": [
+      { "name": "shounen", "desc": "Młodzieżowe anime akcji, często z walką." },
+      "military"
+    ],
+    "Fantastyka": [
+      { "name": "isekai", "desc": "Bohater trafia do innego świata." },
+      "sci-fi", "fantasy"
+    ]
+  }
+}
