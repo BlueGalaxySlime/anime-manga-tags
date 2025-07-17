@@ -16,7 +16,7 @@ Interaktywny system tagów do wyszukiwania, filtrowania i katalogowania postów 
 [anime-manga-tags – GitHub Pages](https://bluegalaxyslime.github.io/anime-manga-tags/)
 
 ## 📁 Struktura repozytorium
-
+Wyszukiwarka:
 - index.html - Wybór tagów (wyszukiwarka)
 - wyniki.html - Wyświetlanie wyników z eksportem
 - style.css - Style wizualne
@@ -25,7 +25,9 @@ Interaktywny system tagów do wyszukiwania, filtrowania i katalogowania postów 
 - edytor.html - Edytor tagów JSON. Edytor tagów online (dodawanie/usuwanie)
 - edytor.js - Skrypt dla edytora. Logika edytora tagów
 - README.md - Ten plik
-
+Post blogspot:
+- generator.html – generator kodu HTML z tagami do posta
+- blogspot-tags.js – skrypt, który: podświetla tagi w poście, o kliknięciu zapisuje wybrane tagi do localStorage, przekierowuje do wyniki.html
 
 ## ✏️ Przyszłe plany
 
