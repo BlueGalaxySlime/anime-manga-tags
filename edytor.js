@@ -10,7 +10,7 @@ function renderVisualEditor() {
     const groupDiv = document.createElement('div');
     groupDiv.innerHTML = `
       <fieldset>
-        <legend>${groupName}</legend>
+        <legend>${groupName} <button onclick="removeGroup('${groupName}')">❌</button></legend>
         <input placeholder="Dodaj podgrupę" type="text" id="sub-${groupName}" />
         <button onclick="addSubgroup('${groupName}')">+ Podgrupa</button>
         <div id="subs-${groupName}"></div>
@@ -24,10 +24,17 @@ function renderVisualEditor() {
       const subDiv = document.createElement('div');
       subDiv.style.margin = '10px 0';
       subDiv.innerHTML = `
-        <strong>${subName}</strong><br>
+        <strong>${subName} <button onclick="removeSubgroup('${groupName}', '${subName}')">❌</button></strong><br>
         <input placeholder="Dodaj tag" type="text" id="tag-${groupName}-${subName}" />
         <button onclick="addTag('${groupName}', '${subName}')">+ Tag</button>
-        <div>${tags.map(tag => `<span>${tag}</span>`).join(', ')}</div>
+        <div>
+          ${tags.map((tagObj, i) => `
+            <span>
+              ${tagObj.tag || tagObj} 
+              <input placeholder="Opis" value="${tagObj.desc || ''}" onchange="editTagDesc('${groupName}', '${subName}', ${i}, this.value)" />
+              <button onclick="removeTag('${groupName}', '${subName}', ${i})">❌</button>
+            </span>`).join('<br>')}
+        </div>
       `;
       subsContainer.appendChild(subDiv);
     });
@@ -60,12 +67,40 @@ function addTag(groupName, subName) {
   const input = document.getElementById(`tag-${groupName}-${subName}`);
   const tag = input.value.trim();
   if (!tag) return;
-  if (!tagsData[groupName][subName].includes(tag)) {
-    tagsData[groupName][subName].push(tag);
+  const existingTags = tagsData[groupName][subName].map(t => t.tag || t);
+  if (!existingTags.includes(tag)) {
+    tagsData[groupName][subName].push({ tag: tag, desc: '' });
     renderVisualEditor();
     updateJSONEditor();
   }
   input.value = '';
+}
+
+function removeGroup(groupName) {
+  delete tagsData[groupName];
+  renderVisualEditor();
+  updateJSONEditor();
+}
+
+function removeSubgroup(groupName, subName) {
+  delete tagsData[groupName][subName];
+  renderVisualEditor();
+  updateJSONEditor();
+}
+
+function removeTag(groupName, subName, index) {
+  tagsData[groupName][subName].splice(index, 1);
+  renderVisualEditor();
+  updateJSONEditor();
+}
+
+function editTagDesc(groupName, subName, index, desc) {
+  if (typeof tagsData[groupName][subName][index] === 'string') {
+    tagsData[groupName][subName][index] = { tag: tagsData[groupName][subName][index], desc: desc };
+  } else {
+    tagsData[groupName][subName][index].desc = desc;
+  }
+  updateJSONEditor();
 }
 
 function updateJSONEditor() {
@@ -82,8 +117,9 @@ function renderVisualPreview() {
     let subIndex = 1;
     Object.entries(subs).forEach(([sub, tags]) => {
       output += `  ${index}.${subIndex} ${sub}\n`;
-      tags.forEach(tag => {
-        output += `    - ${tag}\n`;
+      tags.forEach(tagObj => {
+        const tagText = tagObj.tag || tagObj;
+        output += `    - ${tagText}\n`;
       });
       subIndex++;
     });
