@@ -1,3 +1,4 @@
+const TAG_SOURCE = 'tagi.json';
 const STORAGE_KEY = 'last-selected-tags';
 
 fetch('tagi.json')
