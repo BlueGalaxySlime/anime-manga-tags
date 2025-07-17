@@ -26,8 +26,8 @@ Wyszukiwarka:
 - edytor.js - Skrypt dla edytora. Logika edytora tagów
 - README.md - Ten plik
 Post blogspot:
-- generator.html – generator kodu HTML z tagami do posta
-- blogspot-tags.js – skrypt, który: podświetla tagi w poście, o kliknięciu zapisuje wybrane tagi do localStorage, przekierowuje do wyniki.html
+- generator.html – Generator kodu HTML z tagami do posta
+- blogspot-tags.js – Skrypt do wklejenia w poście, który dodaje kliknięcie na tagi
 
 ## ✏️ Przyszłe plany
 
