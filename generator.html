@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Generator tagów do posta</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 1rem; }
+    textarea { width: 100%; height: 150px; font-family: monospace; }
+    label, button { display: block; margin: 1rem 0 0.5rem; }
+    input[type="text"] { width: 100%; padding: 0.5rem; font-size: 1rem; }
+    button { padding: 0.7rem 1.2rem; font-size: 1rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Generator HTML tagów do posta</h1>
+
+  <label for="existing-code">Wklej istniejący kod tagów (opcjonalnie):</label>
+  <textarea id="existing-code" placeholder="Wklej tutaj, jeśli chcesz edytować"></textarea>
+
+  <label for="default-script">Adres skryptu JS do postów (możesz zmienić):</label>
+  <input type="text" id="default-script" value="https://bluegalaxyslime.github.io/anime-manga-tags/blogspot-tags.js" />
+
+  <label>Wpisz tagi (oddzielone przecinkami):</label>
+  <input type="text" id="tags-input" placeholder="np. Akcja, Fantasy, Europa" />
+
+  <button onclick="generateHTML()">Generuj kod do wklejenia</button>
+
+  <label for="output">Wygenerowany kod HTML:</label>
+  <textarea id="output" readonly></textarea>
+
+  <script>
+    function generateHTML() {
+      const existingCode = document.getElementById('existing-code').value.trim();
+      const scriptUrl = document.getElementById('default-script').value.trim();
+      const tagsText = document.getElementById('tags-input').value.trim();
+
+      let tagsArray = [];
+      if (tagsText) {
+        tagsArray = tagsText.split(',').map(t => t.trim()).filter(Boolean);
+      } else if (existingCode) {
+        // Opcjonalnie parsowanie istniejącego kodu, ale tu uproszczenie: nie robimy
+      }
+
+      let tagsHTML = '';
+      if (tagsArray.length) {
+        tagsHTML = '<div class="post-tags">\n';
+        tagsArray.forEach(tag => {
+          // Wygodny format, kliknięcie przekieruje do strony wyników
+          tagsHTML += `  <span class="post-tag" data-tag="${tag}">${tag}</span>\n`;
+        });
+        tagsHTML += '</div>\n';
+      }
+
+      const finalHTML = `${tagsHTML}<script src="${scriptUrl}"></script>`;
+
+      document.getElementById('output').value = finalHTML;
+    }
+  </script>
+</body>
+</html>
