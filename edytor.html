@@ -8,7 +8,6 @@
 </head>
 <body style="background-color: coral;">
   <h1>Edytor tagów</h1>
-
   <div style="display: flex; gap: 20px; flex-wrap: wrap">
     <div style="flex: 1; min-width: 300px">
       <h2>Edytuj JSON</h2>
@@ -17,19 +16,18 @@
       <button onclick="saveTags()">Zapisz</button>
       <button onclick="loadBackup()">Przywróć ostatni</button>
       <button onclick="formatJSON()">Format JSON</button>
+      <button onclick="resetToDefault()">Przywróć z GitHub</button>
       <input type="file" id="importFile" />
       <button onclick="exportJSON()">Eksportuj</button>
       <h3>Podgląd:</h3>
       <pre id="json-preview"></pre>
     </div>
-
     <div style="flex: 1; min-width: 300px">
       <h2>Formularz wizualny</h2>
       <div id="visual-editor"></div>
       <button onclick="addGroup()">+ Dodaj grupę</button>
     </div>
   </div>
-
   <script src="edytor.js"></script>
 </body>
 </html>
