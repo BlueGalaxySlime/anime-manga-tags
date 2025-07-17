@@ -1,89 +1,91 @@
 const TAG_SOURCE = 'tagi.json';
 const STORAGE_KEY = 'last-selected-tags';
 
-fetch('tagi.json')
-  .then(response => response.json())
+let allTags = [];
+
+fetch(TAG_SOURCE)
+  .then(res => res.json())
   .then(data => {
-    generateTagSelector(data);
-    addSearchFilter();
-  });
+    const selected = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const container = document.getElementById('tag-selector');
+    const searchInput = document.getElementById('tag-search');
+    container.innerHTML = '';
 
-function generateTagSelector(data) {
-  const container = document.getElementById('tag-selector');
-  container.innerHTML = '';
+    Object.entries(data).forEach(([groupName, subgroups]) => {
+      const groupWrapper = document.createElement('fieldset');
+      const legend = document.createElement('legend');
+      legend.textContent = groupName;
+      groupWrapper.appendChild(legend);
 
-  data.forEach(group => {
-    const groupEl = document.createElement('fieldset');
-    const legend = document.createElement('legend');
-    legend.textContent = group.nazwa;
-    groupEl.appendChild(legend);
+      Object.entries(subgroups).forEach(([subgroupName, tags]) => {
+        const subgroupHeader = document.createElement('h3');
+        subgroupHeader.textContent = subgroupName;
+        groupWrapper.appendChild(subgroupHeader);
 
-    group.podgrupy.forEach(sub => {
-      const subLabel = document.createElement('h4');
-      subLabel.textContent = sub.nazwa;
-      groupEl.appendChild(subLabel);
+        const tagsContainer = document.createElement('div');
 
-      sub.tagi.forEach(tagObj => {
-        const id = `tag-${group.nazwa}-${sub.nazwa}-${tagObj.tag}`.replace(/\s+/g, '-');
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = id;
-        checkbox.dataset.group = group.nazwa;
-        checkbox.dataset.subgroup = sub.nazwa;
-        checkbox.value = tagObj.tag;
+        tags.forEach(tagObj => {
+          const tag = typeof tagObj === 'string' ? tagObj : tagObj.name;
+          const desc = typeof tagObj === 'object' && tagObj.desc ? tagObj.desc : '';
+          
+          const id = `tag-${groupName}-${subgroupName}-${tag}`;
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.id = id;
+          input.value = tag;
 
-        const label = document.createElement('label');
-        label.setAttribute('for', id);
-        label.textContent = tagObj.tag;
-        label.title = tagObj.desc || '';
+          const isSelected = selected.find(sel => sel.tag === tag);
+          if (isSelected) input.checked = true;
 
-        groupEl.appendChild(checkbox);
-        groupEl.appendChild(label);
+          const label = document.createElement('label');
+          label.setAttribute('for', id);
+          label.textContent = tag;
+
+          if (desc) {
+          label.title = desc; // tooltip desktop
+          label.addEventListener('click', e => {
+            if (window.innerWidth <= 768) {
+              e.preventDefault();
+              alert(`${tag}: ${desc}`); // Mobile fallback
+              }
+            });
+          }
+  
+          tagsContainer.appendChild(input);
+          tagsContainer.appendChild(label);
+          allTags.push({ tag, id, groupName, subgroupName });
+        });
+
+        groupWrapper.appendChild(tagsContainer);
+      });
+
+      container.appendChild(groupWrapper);
+    });
+
+    searchInput.addEventListener('input', () => {
+      const val = searchInput.value.toLowerCase();
+      allTags.forEach(({ tag, id }) => {
+        const label = document.querySelector(`label[for='${id}']`);
+        if (label) {
+          label.style.display = tag.toLowerCase().includes(val) ? 'inline-block' : 'none';
+        }
       });
     });
-
-    container.appendChild(groupEl);
   });
-
-  loadPreviousSelection();
-}
-
-function addSearchFilter() {
-  const input = document.getElementById('tag-search');
-  input.addEventListener('input', () => {
-    const term = input.value.toLowerCase();
-    document.querySelectorAll('#tag-selector label').forEach(label => {
-      const text = label.textContent.toLowerCase();
-      label.style.display = text.includes(term) ? 'inline-block' : 'none';
-
-      const checkbox = document.getElementById(label.getAttribute('for'));
-      if (checkbox) checkbox.style.display = label.style.display;
-    });
-  });
-}
 
 function submitTags() {
-  const selected = [...document.querySelectorAll('#tag-selector input[type=checkbox]:checked')]
-    .map(cb => ({
-      groupName: cb.dataset.group,
-      subgroupName: cb.dataset.subgroup,
-      tag: cb.value
-    }));
-
+  const selected = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+    .map(cb => {
+      const tag = cb.value;
+      const tagData = allTags.find(t => t.tag === tag);
+      return tagData;
+    });
+  if (!selected.length) return alert('Wybierz tagi!');
   localStorage.setItem(STORAGE_KEY, JSON.stringify(selected));
   window.location.href = 'wyniki.html';
 }
 
 function clearTags() {
-  document.querySelectorAll('#tag-selector input[type=checkbox]').forEach(cb => cb.checked = false);
   localStorage.removeItem(STORAGE_KEY);
-}
-
-function loadPreviousSelection() {
-  const selected = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  selected.forEach(sel => {
-    const selector = `#tag-selector input[data-group="${sel.groupName}"][data-subgroup="${sel.subgroupName}"][value="${sel.tag}"]`;
-    const cb = document.querySelector(selector);
-    if (cb) cb.checked = true;
-  });
+  location.reload();
 }
