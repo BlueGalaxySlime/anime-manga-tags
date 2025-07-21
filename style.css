@@ -7,7 +7,7 @@ body {
 }
 
 fieldset {
-  border: 1px solid #000039;
+  border: 1px solid #808080;
   margin-bottom: 5px;
   padding: 5px;
   border-radius: 8px;
@@ -20,8 +20,8 @@ legend {
 
 #tag-selector label {
   padding: 8px 14px;
-  background: #004040;
-  border: 3px solid #008000;
+  background:  0.2 #004040;
+  border: 3px solid #808080;
   border-radius: 6px;
   cursor: pointer;
   margin-right: 8px;
