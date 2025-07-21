@@ -7,7 +7,7 @@ body {
 }
 
 fieldset {
-  border: 1px solid #000;
+  border: 1px solid rgba(0, 0, 0, 1);
   margin-bottom: 5px;
   padding: 5px;
   border-radius: 8px;
@@ -21,7 +21,7 @@ legend {
 #tag-selector label {
   padding: 8px 14px;
   background: rgba(0, 0, 0, 0.1);
-  border: 2px solid rgba(0, 0, 0, 1.0);
+  border: 2px solid rgba(0, 0, 0, 1);
   border-radius: 6px;
   cursor: pointer;
   margin-right: 8px;
@@ -35,7 +35,7 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked + label {
-  background: rgba(51, 51, 51, 1.0);
+  background: rgba(51, 51, 51, 1);
   color: white;
   border-color: #000;
 }
