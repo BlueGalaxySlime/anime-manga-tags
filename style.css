@@ -20,7 +20,7 @@ legend {
 
 #tag-selector label {
   padding: 8px 5px;
-  background: rgba(0, 0, 0, 0.1);
+  background: #f0f0f0;
   border: 2px solid #000;
   border-radius: 6px;
   cursor: pointer;
