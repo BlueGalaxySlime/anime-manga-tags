@@ -20,8 +20,8 @@ legend {
 
 #tag-selector label {
   padding: 8px 14px;
-  background: Rich Black;
-  border: 3px solid Russian Violet;
+  background: #004040;
+  border: 3px solid #008000;
   border-radius: 6px;
   cursor: pointer;
   margin-right: 8px;
